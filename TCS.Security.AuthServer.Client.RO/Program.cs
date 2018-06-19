@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 
-namespace Fiver.Security.AuthServer.Client.RO
+namespace TCS.Security.AuthServer.Client.RO
 {
     class Program
     {
@@ -15,8 +15,8 @@ namespace Fiver.Security.AuthServer.Client.RO
                 var disco = DiscoveryClient.GetAsync("http://localhost:5000").Result;
 
                 // request token
-                var tokenClient = new TokenClient(disco.TokenEndpoint, "fiver_auth_client_ro", "secret");
-                var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync("james", "password", "fiver_auth_api").Result;
+                var tokenClient = new TokenClient(disco.TokenEndpoint, "tcs_auth_client_ro", "secret");
+                var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync("james", "password", "tcs_auth_api").Result;
 
                 if (tokenResponse.IsError)
                 {

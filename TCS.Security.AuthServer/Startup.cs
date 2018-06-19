@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fiver.Security.AuthServer
+namespace TCS.Security.AuthServer
 {
     public class Startup
     {

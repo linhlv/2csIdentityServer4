@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Fiver.Security.AuthServer
-{
+namespace TCS.Security.AuthServer.Api {
     public class Program
     {
         public static void Main(string[] args)
@@ -13,7 +12,6 @@ namespace Fiver.Security.AuthServer
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:5000")
                 .Build();
     }
 }

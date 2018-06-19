@@ -1,4 +1,4 @@
-﻿using Fiver.Security.AuthServer.Client.Models.Home;
+﻿using TCS.Security.AuthServer.Client.Models.Home;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Fiver.Security.AuthServer.Client.Controllers
+namespace TCS.Security.AuthServer.Client.Controllers
 {
     [Authorize]
     public class HomeController : Controller

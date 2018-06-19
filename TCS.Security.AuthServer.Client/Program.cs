@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Fiver.Security.AuthServer.Client
+namespace TCS.Security.AuthServer.Client
 {
     public class Program
     {

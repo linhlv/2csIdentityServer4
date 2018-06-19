@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fiver.Security.AuthServer.Api.Controllers
+namespace TCS.Security.AuthServer.Client.Controllers
 {
     [Authorize]
     [Route("movies")]

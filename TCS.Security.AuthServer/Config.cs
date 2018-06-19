@@ -4,7 +4,7 @@ using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Fiver.Security.AuthServer
+namespace TCS.Security.AuthServer
 {
     public static class Config
     {
@@ -12,7 +12,7 @@ namespace Fiver.Security.AuthServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("fiver_auth_api", "Fiver.Security.AuthServer.Api")
+                new ApiResource("2cs_auth_api", "TCS.Security.AuthServer.Api")
             };
         }
 
@@ -33,8 +33,8 @@ namespace Fiver.Security.AuthServer
                 // To use both Identity and Access Tokens
                 new Client
                 {
-                    ClientId = "fiver_auth_client",
-                    ClientName = "Fiver.Security.AuthServer.Client",
+                    ClientId = "2cs_auth_client",
+                    ClientName = "TCS.Security.AuthServer.Client",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
@@ -54,15 +54,15 @@ namespace Fiver.Security.AuthServer
                 // Resource Owner Password Flow
                 new Client
                 {
-                    ClientId = "fiver_auth_client_ro",
-                    ClientName = "Fiver.Security.AuthServer.Client.RO",
+                    ClientId = "2cs_auth_client_ro",
+                    ClientName = "TCS.Security.AuthServer.Client.RO",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
                     AllowedScopes =
                     {
-                        "fiver_auth_api"
+                        "2cs_auth_api"
                     },
                 }
             };

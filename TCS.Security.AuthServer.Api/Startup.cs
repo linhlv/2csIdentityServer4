@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fiver.Security.AuthServer.Api
+namespace TCS.Security.AuthServer.Api
 {
     public class Startup
     {
@@ -15,7 +15,7 @@ namespace Fiver.Security.AuthServer.Api
                      {
                          options.Authority = "http://localhost:5000"; // Auth Server
                          options.RequireHttpsMetadata = false;
-                         options.ApiName = "fiver_auth_api"; // API Resource Id
+                         options.ApiName = "2cs_auth_api"; // API Resource Id
                      });
 
             services.AddMvc();

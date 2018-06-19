@@ -1,4 +1,4 @@
-﻿namespace Fiver.Security.AuthServer.Client.Models.Home
+﻿namespace TCS.Security.AuthServer.Client.Models.Home
 {
     public class MovieViewModel
     {
