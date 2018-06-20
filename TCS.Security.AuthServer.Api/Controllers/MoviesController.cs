@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TCS.Security.AuthServer.Client.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class MoviesController : Controller
-    {
-        [AllowAnonymous]
+    {        
         [HttpGet]
         public IActionResult Get()        
         {
