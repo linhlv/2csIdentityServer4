@@ -15,8 +15,8 @@ namespace TCS.Security.AuthServer.Client.RO
                 var disco = DiscoveryClient.GetAsync("http://localhost:5000").Result;
 
                 // request token
-                var tokenClient = new TokenClient(disco.TokenEndpoint, "tcs_auth_client_ro", "secret");
-                var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync("james", "password", "tcs_auth_api").Result;
+                var tokenClient = new TokenClient(disco.TokenEndpoint, "2cs_auth_client_ro", "secret");
+                var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync("james", "password", "2cs_auth_api").Result;
 
                 if (tokenResponse.IsError)
                 {
@@ -30,7 +30,7 @@ namespace TCS.Security.AuthServer.Client.RO
                 var client = new HttpClient();
                 client.SetBearerToken(tokenResponse.AccessToken);
 
-                var response = client.GetAsync("http://localhost:5001/movies").Result;
+                var response = client.GetAsync("http://localhost:5001/app/api/movies").Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine(response.StatusCode);
