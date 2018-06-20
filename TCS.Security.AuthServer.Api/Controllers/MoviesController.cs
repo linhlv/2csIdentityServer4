@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TCS.Security.AuthServer.Client.Controllers
 {
-    [Authorize]
-    [Route("movies")]
+    //[Authorize]
+    [Route("api/[controller]")]
     public class MoviesController : Controller
     {
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get()        
         {
+            var claims = User.Claims;
+
             return Ok(new[]
             {
                 new { Id = 1, Title = "Never Say Never Again", ReleaseYear = 1983, Summary = "A SPECTRE agent has stolen two American nuclear warheads, and James Bond must find their targets before they are detonated." },

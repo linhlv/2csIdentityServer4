@@ -48,7 +48,7 @@ namespace TCS.Security.AuthServer
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "fiver_auth_api"
+                        "2cs_auth_api"
                     },
                 },
                 // Resource Owner Password Flow

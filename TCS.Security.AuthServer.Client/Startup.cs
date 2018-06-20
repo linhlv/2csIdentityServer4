@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using IdentityServer4;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,11 +26,14 @@ namespace TCS.Security.AuthServer.Client
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; // cookie middle setup above
                 options.Authority = "http://localhost:5000"; // Auth Server
                 options.RequireHttpsMetadata = false; // only for development 
-                options.ClientId = "tcs_auth_client"; // client setup in Auth Server
+                options.ClientId = "2cs_auth_client"; // client setup in Auth Server
                 options.ClientSecret = "secret";
-                options.ResponseType = "code id_token"; // means Hybrid flow (id + access token)
-                options.Scope.Add("tcs_auth_api");
-                options.Scope.Add("offline_access");
+                options.ResponseType = "code id_token"; // means Hybrid flow (id + access token)              
+
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                options.Scope.Add("2cs_auth_api");
+
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
             });
