@@ -43,6 +43,7 @@ namespace TCS.Security.AuthServer.Client.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync("oidc");
         }
     }
 }
