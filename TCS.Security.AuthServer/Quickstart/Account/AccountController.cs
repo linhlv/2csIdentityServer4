@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Authentication;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
+using TCS.Security.AuthServer.Data.Identity;
+using Microsoft.AspNetCore.Identity;
+using TCS.Security.AuthServer.Services;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -33,8 +36,12 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
         private readonly AccountService _account;
+        private readonly UserManager<AppIdentityUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
         public AccountController(
+            UserManager<AppIdentityUser> userManager,
+            IEmailSender emailSender,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IHttpContextAccessor httpContextAccessor,
@@ -42,11 +49,14 @@ namespace IdentityServer4.Quickstart.UI
             IEventService events,
             TestUserStore users = null)
         {
+            _userManager = userManager;
+            _emailSender = emailSender;
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             _users = users ?? new TestUserStore(TestUsers.Users);
             _interaction = interaction;
             _events = events;
             _account = new AccountService(interaction, httpContextAccessor, schemeProvider, clientStore);
+
         }
 
         /// <summary>
@@ -309,7 +319,7 @@ namespace IdentityServer4.Quickstart.UI
                 await HttpContext.SignOutAsync();
 
                 // raise the logout event
-                await _events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetName()));
+                await _events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetDisplayName()));
             }
 
             // check if we need to trigger sign-out at an upstream identity provider
@@ -326,6 +336,50 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             return View("LoggedOut", vm);
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new AppIdentityUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Age = model.Age
+            };
+
+            var result = await this._userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                //await this.signInManager.SignInAsync(user, isPersistent: false);
+
+                var confrimationCode =
+                    await this._userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var callbackurl = Url.Action(
+                    controller: "Security",
+                    action: "ConfirmEmail",
+                    values: new { userId = user.Id, code = confrimationCode },
+                    protocol: Request.Scheme);
+
+                await this._emailSender.SendEmailAsync(
+                    email: user.Email,
+                    subject: "Confirm Email",
+                    message: callbackurl);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
         }
     }
 }

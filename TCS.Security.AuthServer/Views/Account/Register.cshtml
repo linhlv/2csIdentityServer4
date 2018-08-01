@@ -1,0 +1,17 @@
+﻿@model RegisterViewModel
+<h3>Register</h3>
+
+<div class="login-page">
+    <div class="page-header">
+        <h1>Login</h1>
+    </div>
+
+    <form asp-route="Register" method="post">
+        <input type="text" asp-for="Email" placeholder="Email" value="linh.le@2clicksolutions.com" /><br />
+        <input type="password" asp-for="Password" placeholder="Password" value="123456" /><br />
+        <input type="password" asp-for="ConfirmPassword" placeholder="Confirm Password" value="123456" /><br />
+        <input type="text" asp-for="Age" placeholder="Age"value="100" /><br />
+        <input type="submit" value="Register" />
+    </form>
+
+</div>
