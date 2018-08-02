@@ -37,10 +37,12 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IEventService _events;
         private readonly AccountService _account;
         private readonly UserManager<AppIdentityUser> _userManager;
+        private readonly SignInManager<AppIdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public AccountController(
             UserManager<AppIdentityUser> userManager,
+            SignInManager<AppIdentityUser> signInManager,
             IEmailSender emailSender,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
@@ -50,6 +52,7 @@ namespace IdentityServer4.Quickstart.UI
             TestUserStore users = null)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _emailSender = emailSender;
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             _users = users ?? new TestUserStore(TestUsers.Users);
@@ -105,14 +108,50 @@ namespace IdentityServer4.Quickstart.UI
                 }
             }
 
+            
             if (ModelState.IsValid)
             {
-                // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
-                {
-                    var user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
+                #region Test User Store
+                //// validate username/password against in-memory store
+                //if (_users.ValidateCredentials(model.Username, model.Password))
+                //{
+                //    var user = _users.FindByUsername(model.Username);
+                //    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
 
+                //    // only set explicit expiration here if user chooses "remember me". 
+                //    // otherwise we rely upon expiration configured in cookie middleware.
+                //    AuthenticationProperties props = null;
+                //    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                //    {
+                //        props = new AuthenticationProperties
+                //        {
+                //            IsPersistent = true,
+                //            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                //        };
+                //    };
+                //    // issue authentication cookie with subject ID and username
+                //    await HttpContext.SignInAsync(user.SubjectId, user.Username, props);
+
+                //    // make sure the returnUrl is still valid, and if so redirect back to authorize endpoint or a local page
+                //    if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+                //    {
+                //        return Redirect(model.ReturnUrl);
+                //    }
+
+                //    return Redirect("~/");
+                //}
+
+                //await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+
+                //ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+                #endregion
+
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                if (result.Succeeded)
+                {
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
+                    
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
                     AuthenticationProperties props = null;
@@ -125,7 +164,7 @@ namespace IdentityServer4.Quickstart.UI
                         };
                     };
                     // issue authentication cookie with subject ID and username
-                    await HttpContext.SignInAsync(user.SubjectId, user.Username, props);
+                    await HttpContext.SignInAsync(user.UserName, user.Id, props);
 
                     // make sure the returnUrl is still valid, and if so redirect back to authorize endpoint or a local page
                     if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
@@ -140,6 +179,7 @@ namespace IdentityServer4.Quickstart.UI
 
                 ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
             }
+
 
             // something went wrong, show form with error
             var vm = await _account.BuildLoginViewModelAsync(model);

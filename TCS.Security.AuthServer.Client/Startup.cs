@@ -20,13 +20,13 @@ namespace TCS.Security.AuthServer.Client
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-            .AddCookie()
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(options =>
             {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; // cookie middle setup above
                 options.Authority = "http://localhost:5000"; // Auth Server
                 options.RequireHttpsMetadata = false; // only for development 
-                options.ClientId = "2cs_auth_client"; // client setup in Auth Server
+                options.ClientId = "2cs_auth_client"; // client setup in Auth Server                
                 options.ClientSecret = "secret";
                 options.ResponseType = "code id_token"; // means Hybrid flow (id + access token)              
 

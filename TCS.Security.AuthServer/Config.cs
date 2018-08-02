@@ -37,10 +37,9 @@ namespace TCS.Security.AuthServer
                     ClientName = "TCS.Security.AuthServer.Client",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,                    
                     AllowOfflineAccess = true,
-                    RequireConsent = false,
-
+                    RequireConsent = true,                    
                     RedirectUris = { "http://localhost:5002/signin-oidc" },
                     PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
                     
@@ -49,7 +48,7 @@ namespace TCS.Security.AuthServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "2cs_auth_api"
-                    },
+                    },                    
                 },
                 // Resource Owner Password Flow
                 new Client
